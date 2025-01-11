@@ -1,3 +1,9 @@
 //main file 
-let message: string="Typescript"
-console.log(`Hello ${message}`);
+
+export function greeting(): string{
+    return "Hello TypeScript + 🦕"
+}
+
+
+
+

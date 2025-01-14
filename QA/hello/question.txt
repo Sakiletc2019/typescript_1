@@ -13,7 +13,7 @@ Hints:
     use 'type' assortion for define function types.
     export function for use in testing and benchmark file.
     
-    
+
 
 Project Hirarchy:
 hello/ (main folder name)
@@ -72,12 +72,12 @@ Example:
          ---------------------------------------------------
 
     Declaration Function Example:
-         ---------------------------------------------------------------
-        |                                                               |
-        |   const Greet: Function = (parameters)=>{                     |
-        |       return '   ' };                                         |
-        |                                                               |
-         ---------------------------------------------------------------
+         -----------------------------------------------
+        |                                               |
+        |   const Greet: Function = (parameters)=>{     |
+        |       return '   ' };                         |
+        |                                               |
+         -----------------------------------------------
 
     Export Function Example:
          -----------------------

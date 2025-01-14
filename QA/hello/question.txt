@@ -1,0 +1,77 @@
+> Question
+
+Write a TypeScript for Writing Greeting message.
+
+
+Recomendation:
+    - write main code under 'main.ts' file
+    - write testing code under 'main.test.ts' file
+    - write benchmark code under 'main.bench.ts' file
+
+Hints:
+    use 'interface' for parameters data type declaration
+    use 'type' assortion for define function types.
+    export function for use in testing and benchmark file.
+    
+    
+
+Project Hirarchy:
+hello/ (main folder name)
+|-main.ts
+|-main.test.ts
+|-main.bench.ts
+|-QUESTION.txt
+|-
+
+Test Case:
+    Test case 1.
+         -------------------------------
+        |                               |
+        |   greet({                     |
+        |       message: "Hello";       |
+        |       sender: "Jon";          |
+        |   })                          |
+        |                               |
+         -------------------------------
+
+    Testcase 2.
+         -------------------------------
+        |                               |
+        |   greet({                     |
+        |       message: "Hello";       |
+        |       sender: "Jon";          |
+        |   })                          |
+        |                               |
+         -------------------------------
+
+Example:
+    interface Example:
+         -------------------------------------------
+        |                                           |
+        |   interface Params{                       |
+        |       message: string;                    |
+        |       sender: string;                     |
+        |   }                                       |
+        |                                           |
+         -------------------------------------------
+        
+    Type Example:
+         ---------------------------------------------------
+        |                                                   |
+        |   type Fucntion=(parameters: Params)=>string;     |
+        |                                                   |
+         ---------------------------------------------------
+
+    Declaration Function Example:
+         ---------------------------------------------------------------
+        |                                                               |
+        |   const Greet: Function = (parameters)=>{ return '   ' };     |
+        |                                                               |
+         ---------------------------------------------------------------
+
+    Export Function Example:
+         -----------------------
+        |                       |
+        |   export {Greet};     |
+        |                       |
+         -----------------------

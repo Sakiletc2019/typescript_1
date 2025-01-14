@@ -1,7 +1,4 @@
 //add teo number
-let a= 5;
-let b= 6;
-
 type func=(
     a:number,
     b: number,

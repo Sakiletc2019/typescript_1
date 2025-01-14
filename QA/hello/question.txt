@@ -32,16 +32,18 @@ Test Case:
         |       sender: "Jon";          |
         |   })                          |
         |                               |
+        |OUTPUT: Jon says: Hello        |
          -------------------------------
 
     Testcase 2.
          -------------------------------
         |                               |
         |   greet({                     |
-        |       message: "Hello";       |
-        |       sender: "Jon";          |
+        |       message: "Hi !";        |
+        |       sender: "Doe";          |
         |   })                          |
         |                               |
+        |OUTPUT: Doe says: Hi!          |
          -------------------------------
 
 Example:

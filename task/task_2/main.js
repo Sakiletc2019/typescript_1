@@ -1,6 +1,6 @@
 "use strict";
 //import process from "node:process";
-Object.defineProperty(exports, "__esModule", { value: true });
+//Object.defineProperty(exports, "__esModule", { value: true });
 exports.benchmark = benchmark;
 const Market = /** @class */ (function () {
     function Market() {

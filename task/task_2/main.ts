@@ -1,6 +1,5 @@
 
-
-import process from "node:process";
+//import process from "node:process";
 
 // main.ts
 
@@ -137,6 +136,7 @@ export function benchmark() {
 }
 
 //stand alone
+/*
 if (import.meta.main) {
     const platform = new TradingPlatform();
 
@@ -195,3 +195,4 @@ if (import.meta.main) {
         }
     }
 }
+    */

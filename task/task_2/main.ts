@@ -4,12 +4,12 @@ import process from "node:process";
 
 // main.ts
 
-interface Stock {
+export interface Stock {
     symbol: string;
     price: number;
 }
 
-interface PortfolioItem {
+export interface PortfolioItem {
     stock: Stock;
     quantity: number;
 }
@@ -119,6 +119,22 @@ console.log('Portfolio:', platform.getPortfolio());
 platform.sellStock('AAPL', 5);
 console.log('Portfolio Value:', platform.getPortfolioValue());
 console.log('Portfolio:', platform.getPortfolio());
+
+//for benchmark
+export function benchmark() {
+    const platform = new TradingPlatform();
+    console.time('Benchmark');
+
+    for (let i = 0; i < 1000; i++) {
+        platform.buyStock('AAPL', 10);
+        platform.buyStock('GOOGL', 5);
+        platform.sellStock('AAPL', 5);
+    }
+
+    console.timeEnd('Benchmark');
+    console.log('Final Portfolio Value:', platform.getPortfolioValue());
+    console.log('Final Portfolio:', platform.getPortfolio());
+}
 
 //stand alone
 if (import.meta.main) {

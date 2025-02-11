@@ -1,127 +1,171 @@
 "use strict";
-// main.ts - Simple Stock Trading Platform
-import process from "node:process";
-import readline from 'node:readline';
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
-// Simulated stock market data (Symbol, Price, Date)
-const stocks = [
-    { symbol: "A", price: 150, date: "2025-02-11" },
-    { symbol: "B", price: 2800, date: "2025-02-11" },
-    { symbol: "C", price: 750, date: "2025-02-11" }
-];
-// Initial cash balance
-let cashBalance = 10000;
-// Portfolio to store owned stocks
-const portfolio = [];
-// Function to display available stocks
-function displayStocks() {
-    console.log("\n📈 Available Stocks:");
-    stocks.forEach(function (stock) {
-        console.log("   ".concat(stock.symbol, " - $").concat(stock.price));
-    });
-}
-// Function to buy a stock
-function buyStock(symbol, quantity) {
-    const stock = stocks.find(function (s) { return s.symbol === symbol; });
-    if (!stock) {
-        console.log("❌ Stock not found.");
-        return;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.benchmark = benchmark;
+var node_process_1 = require("node:process");
+var Market = /** @class */ (function () {
+    function Market() {
+        this.stocks = [];
+        this.stocks = [
+            { symbol: 'AAPL', price: 150 },
+            { symbol: 'GOOGL', price: 2800 },
+            { symbol: 'AMZN', price: 3400 },
+        ];
     }
-    const cost = stock.price * quantity;
-    if (cashBalance >= cost) {
-        portfolio.push({ symbol: symbol, quantity: quantity, buyPrice: stock.price });
-        cashBalance -= cost;
-        console.log("\u2705 Bought ".concat(quantity, " shares of ").concat(symbol, " at $").concat(stock.price, " each."));
-    }
-    else {
-        console.log("❌ Not enough cash to buy.");
-    }
-}
-// Function to sell a stock
-function sellStock(symbol, quantity) {
-    const index = portfolio.findIndex(function (s) { return s.symbol === symbol; });
-    if (index === -1 || portfolio[index].quantity < quantity) {
-        console.log("❌ Not enough stock to sell.");
-        return;
-    }
-    const stock = stocks.find(function (s) { return s.symbol === symbol; });
-    if (!stock) {
-        console.log("❌ Stock not found.");
-        return;
-    }
-    const profit = (stock.price - portfolio[index].buyPrice) * quantity;
-    cashBalance += stock.price * quantity;
-    portfolio[index].quantity -= quantity;
-    if (portfolio[index].quantity === 0) {
-        portfolio.splice(index, 1); // Remove stock from portfolio if quantity is zero
-    }
-    console.log("\u2705 Sold ".concat(quantity, " shares of ").concat(symbol, " for a profit of $").concat(profit.toFixed(2), "."));
-}
-// Function to display portfolio details
-function portfolioValue() {
-    let totalValue = 0;
-    console.log("\n📊 Portfolio Summary:");
-    portfolio.forEach(function (stock) {
-        const marketStock = stocks.find(function (s) { return s.symbol === stock.symbol; });
-        if (marketStock) {
-            const currentValue = marketStock.price * stock.quantity;
-            totalValue += currentValue;
-            console.log("   ".concat(stock.symbol, " - ").concat(stock.quantity, " shares | Buy Price: $").concat(stock.buyPrice, " | Current Price: $").concat(marketStock.price, " | Value: $").concat(currentValue));
+    Market.prototype.getMarketData = function () {
+        return this.stocks;
+    };
+    Market.prototype.updateStockPrice = function (symbol, newPrice) {
+        var stock = this.stocks.find(function (s) { return s.symbol === symbol; });
+        if (stock) {
+            stock.price = newPrice;
         }
-    });
-    console.log("\n\uD83D\uDCB0 Cash Balance: $".concat(cashBalance));
-    console.log("\uD83D\uDCC8 Total Portfolio Value: $".concat(totalValue));
-    console.log("\uD83E\uDD11 Net Worth: $".concat(cashBalance + totalValue));
-}
-// Function to create a CLI menu
-function showMenu() {
-    console.log("\n📌 Stock Trading Menu:");
-    console.log("1️⃣ View Available Stocks");
-    console.log("2️⃣ Buy Stocks");
-    console.log("3️⃣ Sell Stocks");
-    console.log("4️⃣ View Portfolio");
-    console.log("5️⃣ Exit");
-    rl.question("👉 Enter your choice: ", function (choice) {
-        switch (choice) {
-            case "1":
-                displayStocks();
-                break;
-            case "2":
-                rl.question("📌 Enter Stock Symbol: ", function (symbol) {
-                    rl.question("📌 Enter Quantity: ", function (quantity) {
-                        buyStock(symbol.toUpperCase(), parseInt(quantity));
-                        showMenu();
-                    });
-                });
-                return;
-            case "3":
-                rl.question("📌 Enter Stock Symbol: ", function (symbol) {
-                    rl.question("📌 Enter Quantity: ", function (quantity) {
-                        sellStock(symbol.toUpperCase(), parseInt(quantity));
-                        showMenu();
-                    });
-                });
-                return;
-            case "4":
-                portfolioValue();
-                break;
-            case "5":
-                console.log("🚀 Exiting stock trading platform...");
-                rl.close();
-                return;
-            default:
-                console.log("❌ Invalid choice. Try again.");
+    };
+    return Market;
+}());
+var Portfolio = /** @class */ (function () {
+    function Portfolio() {
+        this.items = [];
+    }
+    Portfolio.prototype.addStock = function (stock, quantity) {
+        var existingItem = this.items.find(function (item) { return item.stock.symbol === stock.symbol; });
+        if (existingItem) {
+            existingItem.quantity += quantity;
         }
-        showMenu();
-    });
+        else {
+            this.items.push({ stock: stock, quantity: quantity });
+        }
+    };
+    Portfolio.prototype.removeStock = function (stock, quantity) {
+        var existingItem = this.items.find(function (item) { return item.stock.symbol === stock.symbol; });
+        if (existingItem) {
+            existingItem.quantity -= quantity;
+            if (existingItem.quantity <= 0) {
+                this.items = this.items.filter(function (item) { return item.stock.symbol !== stock.symbol; });
+            }
+        }
+    };
+    Portfolio.prototype.getPortfolioValue = function () {
+        return this.items.reduce(function (total, item) { return total + item.stock.price * item.quantity; }, 0);
+    };
+    Portfolio.prototype.getPortfolio = function () {
+        return this.items;
+    };
+    return Portfolio;
+}());
+var TradingPlatform = /** @class */ (function () {
+    function TradingPlatform() {
+        this.market = new Market();
+        this.portfolio = new Portfolio();
+    }
+    TradingPlatform.prototype.buyStock = function (symbol, quantity) {
+        var stock = this.market.getMarketData().find(function (s) { return s.symbol === symbol; });
+        if (stock) {
+            this.portfolio.addStock(stock, quantity);
+            console.log("Bought ".concat(quantity, " shares of ").concat(symbol));
+        }
+        else {
+            console.log("Stock ".concat(symbol, " not found"));
+        }
+    };
+    TradingPlatform.prototype.sellStock = function (symbol, quantity) {
+        var stock = this.market.getMarketData().find(function (s) { return s.symbol === symbol; });
+        if (stock) {
+            this.portfolio.removeStock(stock, quantity);
+            console.log("Sold ".concat(quantity, " shares of ").concat(symbol));
+        }
+        else {
+            console.log("Stock ".concat(symbol, " not found"));
+        }
+    };
+    TradingPlatform.prototype.getPortfolioValue = function () {
+        return this.portfolio.getPortfolioValue();
+    };
+    TradingPlatform.prototype.getPortfolio = function () {
+        return this.portfolio.getPortfolio();
+    };
+    TradingPlatform.prototype.getMarketData = function () {
+        return this.market.getMarketData();
+    };
+    return TradingPlatform;
+}());
+// Example usage
+var platform = new TradingPlatform();
+platform.buyStock('AAPL', 10);
+platform.buyStock('GOOGL', 5);
+console.log('Portfolio Value:', platform.getPortfolioValue());
+console.log('Portfolio:', platform.getPortfolio());
+platform.sellStock('AAPL', 5);
+console.log('Portfolio Value:', platform.getPortfolioValue());
+console.log('Portfolio:', platform.getPortfolio());
+//for benchmark
+function benchmark() {
+    var platform = new TradingPlatform();
+    console.time('Benchmark');
+    for (var i = 0; i < 1000; i++) {
+        platform.buyStock('AAPL', 10);
+        platform.buyStock('GOOGL', 5);
+        platform.sellStock('AAPL', 5);
+    }
+    console.timeEnd('Benchmark');
+    console.log('Final Portfolio Value:', platform.getPortfolioValue());
+    console.log('Final Portfolio:', platform.getPortfolio());
 }
-// Start the program
-console.log("🚀 Welcome to the Stock Trading Platform!");
-showMenu();
-//for standalone run
+//stand alone
 if (import.meta.main) {
-    showMenu();
+    var platform_1 = new TradingPlatform();
+    while (true) {
+        console.log('\n1. Buy Stock');
+        console.log('2. Sell Stock');
+        console.log('3. View Portfolio Value');
+        console.log('4. View Portfolio');
+        console.log('5. View Market Data');
+        console.log('6. Exit');
+        var choice = prompt('Enter your choice: ');
+        switch (choice) {
+            case '1': {
+                var buySymbol = prompt('Enter stock symbol to buy: ');
+                var buyQuantityInput = prompt('Enter quantity to buy: ');
+                var buyQuantity = parseInt(buyQuantityInput !== null && buyQuantityInput !== void 0 ? buyQuantityInput : '0', 10);
+                if (buySymbol) {
+                    platform_1.buyStock(buySymbol, buyQuantity);
+                }
+                else {
+                    console.log('Invalid stock symbol.');
+                }
+                break;
+            }
+            case '2': {
+                var sellSymbol = prompt('Enter stock symbol to sell: ');
+                var sellQuantityInput = prompt('Enter quantity to sell: ');
+                var sellQuantity = parseInt(sellQuantityInput !== null && sellQuantityInput !== void 0 ? sellQuantityInput : '0', 10);
+                if (sellSymbol) {
+                    platform_1.sellStock(sellSymbol, sellQuantity);
+                }
+                else {
+                    console.log('Invalid stock symbol.');
+                }
+                break;
+            }
+            case '3': {
+                console.log('Portfolio Value:', platform_1.getPortfolioValue());
+                break;
+            }
+            case '4': {
+                console.log('Portfolio:', platform_1.getPortfolio());
+                break;
+            }
+            case '5': {
+                console.log('Market Data:', platform_1.getMarketData());
+                break;
+            }
+            case '6': {
+                console.log('Exiting...');
+                node_process_1.default.exit(0);
+                break;
+            }
+            default: {
+                console.log('Invalid choice. Please try again.');
+            }
+        }
+    }
 }
